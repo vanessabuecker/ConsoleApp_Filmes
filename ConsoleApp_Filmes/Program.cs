@@ -1,19 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ConsoleApp_Filmes
 {
+   
     internal class Program
     {
+        static string nome = "";
         static void Main(string[] args)
         {
             List<string> filmesSelecionados = new List<string>();
+            
+            if (File.Exists("nome.txt"))
+            {
+                nome = File.ReadAllText("nome.txt");
+            }
+            else
+            {
+                Console.WriteLine("Digite o seu nome: ");
+                nome = Console.ReadLine();
+                File.WriteAllText("nome.txt", nome);
+            }
             bool mostrarMenu = true;
-
             while (mostrarMenu)
+
             {
                 mostrarMenu = MenuPrincipal(filmesSelecionados);
             }
@@ -21,7 +37,7 @@ namespace ConsoleApp_Filmes
         private static bool MenuPrincipal(List<string> filmesSelecionados)
         {
             Console.Clear();
-            Console.WriteLine("Escolha um gênero de filme: ");
+            Console.WriteLine($"Ola, {nome}. Escolha um gênero de filme: ");
             Console.WriteLine("1) Ação");
             Console.WriteLine("2) Terror");
             Console.WriteLine("3) Comédia");
@@ -38,6 +54,7 @@ namespace ConsoleApp_Filmes
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write("Opção selecionada: ");
             Console.ResetColor();
+
 
             switch (Console.ReadLine())
             {
@@ -73,10 +90,10 @@ namespace ConsoleApp_Filmes
         }
         private static void ExibirComedia(List<string> filmesSelecionados)
         {
+          
             Console.WriteLine("FILMES DE COMÉDIA");
 
             Console.WriteLine("\r\nQual filme deseja assistir? ");
-
 
             Console.WriteLine("\r\n1) Todo mundo em pânico I");
             Console.WriteLine("2) O Peso do Talento");
@@ -137,7 +154,7 @@ namespace ConsoleApp_Filmes
         {
             Console.WriteLine("FILMES DE COMÉDIA");
 
-            Console.WriteLine("\r\nQual filme deseja assistir? ");
+            Console.WriteLine($"\r\n{nome}, Qual filme deseja assistir? ");
 
             Console.WriteLine("\r\n1) Sr e Sra Smith");
             Console.WriteLine("2) Viúva Negra");
@@ -345,12 +362,12 @@ namespace ConsoleApp_Filmes
         }
         private static void FilmesAssistidos(List<string> filmesSelecionados)
         {
-            Console.WriteLine("Lista de filmes já assistidos: ");
+            Console.WriteLine($"Olá {nome}, Lista de filmes já assistidos: ");
             Console.WriteLine();
 
             if (filmesSelecionados.Count == 0)
             {
-                Console.WriteLine("Você ainda não assistiu nenhum filme.");
+                Console.WriteLine($"{nome}, você ainda não assistiu a nenhum filme.");
             }
             else
             {
@@ -366,4 +383,4 @@ namespace ConsoleApp_Filmes
         }
     }
 }
-}
+
