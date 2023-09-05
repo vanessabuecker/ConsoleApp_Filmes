@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleApp_Filmes
 {
-   
     internal class Program
     {
         static string nome = "";
         static void Main(string[] args)
         {
             List<string> filmesSelecionados = new List<string>();
+            List<string> filmesDesejados = new List<string>();
             
             if (File.Exists("nome.txt"))
             {
@@ -55,7 +50,6 @@ namespace ConsoleApp_Filmes
             Console.Write("Opção selecionada: ");
             Console.ResetColor();
 
-
             switch (Console.ReadLine())
             {
                 case "1":
@@ -88,9 +82,115 @@ namespace ConsoleApp_Filmes
                 default: return true;
             }
         }
+        private static void AdicionarFilme(List<string> filmesSelecionados, string nomeFilme)
+        {
+            Console.WriteLine($"Você já assistiu a este filme? Digite 'S' para SIM e 'N' para NAO");
+            string assistiuFilme = Console.ReadLine().ToUpper();
+            if (assistiuFilme.Contains("S"))
+            {
+                Console.WriteLine("Digite a data em que assistiu a este filme.");
+                string dataFilmeAssistido = Console.ReadLine();
+                filmesSelecionados.Add($"{nomeFilme}  \r\nData de cadastro: {DateTime.Now} \r\n Assistido dia: {dataFilmeAssistido} ");
+            }
+            else if (assistiuFilme.Contains("N"))
+            {
+                filmesSelecionados.Add($"{nomeFilme}  \r\nData de cadastro: {DateTime.Now} \r\n Assistido dia: Não assistido. ");
+            }
+
+            Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
+        }
+        private static void CadastrarNovoFilme(List<string>filmesSelecionados)
+        {
+            Console.WriteLine("Escolha o tipo de entretenimento que deseja cadastrar");
+
+            Console.WriteLine("1) Filme");
+            Console.WriteLine("2) Seriado");
+            Console.WriteLine("3) Documentario");
+            string tipoEntretenimento = Console.ReadLine();
+
+            switch (tipoEntretenimento)
+            {
+                case "1":
+                    CadastrarFilme(filmesSelecionados);
+                    break;
+
+                case "2":
+                    CadastrarSeriado(filmesSelecionados);
+                    break;
+
+                case "3":
+                   CadastrarDocumentario(filmesSelecionados);
+                    break;
+            }
+        }
+        private static void CadastrarSeriado(List<string> filmesSelecionados)
+        {
+            Console.WriteLine("Digite o nome do seriado que deseja adicionar");
+            string novofilme = Console.ReadLine();
+
+            Console.WriteLine("Qual o dia, mês e ano você assistiu a este seriado?");
+            string dataFilmeAssistido = Console.ReadLine();
+
+            Console.WriteLine("O que achou do seriado? Digite uma nota de 0 a 5");
+            int nota = int.Parse(Console.ReadLine());
+            if (nota < 0 || nota > 5)
+            {
+                Console.WriteLine("Digite um valor válido");
+            }
+            else
+            {
+                filmesSelecionados.Add($"Tipo de entretenimento: Seriado \r\n Nome: {novofilme} \r\n Nota: {nota} \r\n Data de cadastro: {DateTime.Now}\r\n Assistido dia: {dataFilmeAssistido}");
+                Console.WriteLine($"o seriado '{novofilme}' foi cadastrado com sucesso! Pessione Enter para retornar ao Menu.");
+                Console.WriteLine();
+            }
+            Console.ReadLine();
+        }
+        private static void CadastrarFilme(List<string> filmesSelecionados)
+        {
+            Console.WriteLine("Digite o nome do filme que deseja adicionar");
+            string novofilme = Console.ReadLine();
+
+            Console.WriteLine("Qual o dia, mês e ano você assistiu a este filme?");
+            string dataFilmeAssistido = Console.ReadLine();
+
+            Console.WriteLine("O que achou do filme? Digite uma nota de 0 a 5");
+            int nota = int.Parse(Console.ReadLine());
+            if (nota < 0 || nota > 5)
+            {
+                Console.WriteLine("Digite um valor válido");
+            }
+            else
+            {
+                filmesSelecionados.Add($"Tipo de entretenimento: Filme \r\n Nome: {novofilme} \r\n Nota: {nota} \r\n Data de cadastro: {DateTime.Now}\r\n Assistido dia: {dataFilmeAssistido}");
+                Console.WriteLine($"o filme '{novofilme}' foi cadastrado com sucesso! Pessione Enter para retornar ao Menu.");
+                Console.WriteLine();
+            }
+            Console.ReadLine();
+        }
+        private static void CadastrarDocumentario(List<string> filmesSelecionados)
+        {
+            Console.WriteLine("Digite o nome do documentário que deseja adicionar");
+            string novofilme = Console.ReadLine();
+
+            Console.WriteLine("Qual o dia, mês e ano você assistiu a este documentário?");
+            string dataFilmeAssistido = Console.ReadLine();
+
+            Console.WriteLine("O que achou do documentário? Digite uma nota de 0 a 5");
+            int nota = int.Parse(Console.ReadLine());
+            if (nota < 0 || nota > 5)
+            {
+                Console.WriteLine("Digite um valor válido");
+            }
+            else
+            {
+                filmesSelecionados.Add($"Tipo de entretenimento: Documentário \r\n Nome: {novofilme} \r\n Nota: {nota} \r\n Data de cadastro: {DateTime.Now}\r\n Assistido dia: {dataFilmeAssistido}");
+                Console.WriteLine($"o documentário '{novofilme}' foi cadastrado com sucesso! Pessione Enter para retornar ao Menu.");
+                Console.WriteLine();
+            }
+            Console.ReadLine();
+        }
         private static void ExibirComedia(List<string> filmesSelecionados)
         {
-          
             Console.WriteLine("FILMES DE COMÉDIA");
 
             Console.WriteLine("\r\nQual filme deseja assistir? ");
@@ -106,89 +206,62 @@ namespace ConsoleApp_Filmes
             switch (Console.ReadLine())
             {
                 case "1":
-                    filmesSelecionados.Add($"Todo mundo em pânico I - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
+                    AdicionarFilme(filmesSelecionados, "Todo mundo em pânico I");
                     break;
 
                 case "2":
-                    filmesSelecionados.Add($"O Peso do Talento Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
+                    AdicionarFilme(filmesSelecionados, "O Peso do Talento");
                     break;
 
                 case "3":
-                    filmesSelecionados.Add($"O Homem de Toronto Data:{DateTime.Now} ");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
+                    AdicionarFilme(filmesSelecionados, "O Homem de Toronto");
                     break;
 
                 case "4":
-                    filmesSelecionados.Add($"Shiva Baby Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
+                    AdicionarFilme(filmesSelecionados, "Shiva Baby");
                     break;
 
                 case "5":
-                    filmesSelecionados.Add($"Free Guy - Assumindo o Controle Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
+                    AdicionarFilme(filmesSelecionados, "Free Guy - Assumindo o Controle");
                     break;
 
                 case "6":
-                    filmesSelecionados.Add($"De Férias da Família Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
+                    AdicionarFilme(filmesSelecionados, "De Férias da Família");
                     break;
 
                 case "7":
-                    Console.WriteLine("Digite o nome do filme: ");
-                    string novoFilme = Console.ReadLine();
-                    filmesSelecionados.Add(novoFilme);
-                    Console.WriteLine($"Filme '{novoFilme}' cadastrado com sucesso! Pessione Enter para retornar ao Menu.");
+                    CadastrarNovoFilme(filmesSelecionados);
                     break;
 
                 default:
-                    Console.WriteLine("\r\nOpção escolhida inválida. Tente novamente.");
+                    Console.WriteLine("Opção escolhida inválida. Tente novamente.");
                     Console.ReadLine();
                     break;
             }
-
             Console.ReadLine();
         }
         private static void ExibirAcao(List<string> filmesSelecionados)
         {
-            Console.WriteLine("FILMES DE COMÉDIA");
+            Console.WriteLine("FILMES DE AÇÃO");
 
             Console.WriteLine($"\r\n{nome}, Qual filme deseja assistir? ");
 
             Console.WriteLine("\r\n1) Sr e Sra Smith");
             Console.WriteLine("2) Viúva Negra");
-            Console.WriteLine("3) Batman - O Cavaleiro Das Trevas");
-            Console.WriteLine("4) Vingadores: Ultimato");
-            Console.WriteLine("5) Cadastrar um novo filme");
+            Console.WriteLine("3) Cadastrar um novo filme");
 
             switch (Console.ReadLine())
             {
                 case "1":
-                    filmesSelecionados.Add($"Sr e Sra Smith - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
+                    AdicionarFilme(filmesSelecionados, "Sr e Sra Smith");
                     break;
 
                 case "2":
-                    filmesSelecionados.Add($"Viúva Negra - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
+                    AdicionarFilme(filmesSelecionados, "Viúva Negra");
                     break;
 
                 case "3":
-                    filmesSelecionados.Add($"Batman - O Cavaleiro Das Trevas - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
-                    break;
-
-                case "4":
-                    filmesSelecionados.Add($"Vingadores: Ultimato - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
-                    break;
-
-                case "5":
-                    Console.WriteLine("Digite o nome do filme: ");
-                    string novoFilme = Console.ReadLine();
-                    filmesSelecionados.Add(novoFilme);
-                    Console.WriteLine($"Filme '{novoFilme}' cadastrado com sucesso! Pessione Enter para retornar ao Menu.");
+                    CadastrarNovoFilme(filmesSelecionados);
                     break;
 
                 default:
@@ -200,49 +273,26 @@ namespace ConsoleApp_Filmes
         }
         private static void ExibirTerror(List<string> filmesSelecionados)
         {
-            Console.WriteLine("FILMES DE COMÉDIA");
+            Console.WriteLine("FILMES DE TERROR");
 
             Console.WriteLine("\r\nQual filme deseja assistir? ");
 
             Console.WriteLine("1) Premonição");
             Console.WriteLine("2) Não! Não Olhe!");
-            Console.WriteLine("3) Sorria");
-            Console.WriteLine("4) O Telefone Preto");
-            Console.WriteLine("5) Os Inocentes");
             Console.WriteLine("6) Cadastrar um novo filme");
 
             switch (Console.ReadLine())
             {
                 case "1":
-                    filmesSelecionados.Add($"Premonição - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
+                    AdicionarFilme(filmesSelecionados, "Premoniçã");
                     break;
 
                 case "2":
-                    filmesSelecionados.Add($"Não! Não Olhe! - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
+                    AdicionarFilme(filmesSelecionados, " Não! Não Olhe!");
                     break;
 
                 case "3":
-                    filmesSelecionados.Add($"Sorria - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
-                    break;
-
-                case "4":
-                    filmesSelecionados.Add($"O Telefone Preto - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
-                    break;
-
-                case "5":
-                    filmesSelecionados.Add($"s Inocentes - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
-                    break;
-
-                case "6":
-                    Console.WriteLine("\r\nDigite o nome do filme: ");
-                    string novoFilme = Console.ReadLine();
-                    filmesSelecionados.Add(novoFilme);
-                    Console.WriteLine($"\r\nFilme '{novoFilme}' cadastrado com sucesso.");
+                    CadastrarNovoFilme(filmesSelecionados);
                     break;
 
                 default:
@@ -254,55 +304,26 @@ namespace ConsoleApp_Filmes
         }
         private static void ExibirDrama(List<string> filmesSelecionados)
         {
-            Console.WriteLine("FILMES DE COMÉDIA");
+            Console.WriteLine("FILMES DE DRAMA");
 
             Console.WriteLine("\r\nQual filme deseja assistir? ");
 
             Console.WriteLine("1) Éramos seis");
             Console.WriteLine("2) O Poderoso Chefão");
-            Console.WriteLine("3) Um Sonho de Liberdade");
-            Console.WriteLine("4) A Lista de Schindler");
-            Console.WriteLine("5) Forrest Gump - O Contador de Histórias");
-            Console.WriteLine("6) À Espera de um Milagre");
-            Console.WriteLine("7) Cadastrar um novo filme");
+            Console.WriteLine("3) Cadastrar um novo filme");
 
             switch (Console.ReadLine())
             {
                 case "1":
-                    filmesSelecionados.Add($"Éramos seis - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
+                    AdicionarFilme(filmesSelecionados, "Éramos seis");
                     break;
 
                 case "2":
-                    filmesSelecionados.Add($"O Poderoso Chefão - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
+                    AdicionarFilme(filmesSelecionados, "O Poderoso Chefão");
                     break;
 
                 case "3":
-                    filmesSelecionados.Add($"Um Sonho de Liberdade - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
-                    break;
-
-                case "4":
-                    filmesSelecionados.Add($"A Lista de Schindler - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
-                    break;
-
-                case "5":
-                    filmesSelecionados.Add($"Forrest Gump - O Contador de Histórias - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
-                    break;
-
-                case "6":
-                    filmesSelecionados.Add($"À Espera de um Milagre - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
-                    break;
-
-                case "7":
-                    Console.WriteLine("\r\nDigite o nome do filme: ");
-                    string novoFilme = Console.ReadLine();
-                    filmesSelecionados.Add(novoFilme);
-                    Console.WriteLine($"\r\nFilme '{novoFilme}' cadastrado com sucesso.");
+                    CadastrarNovoFilme(filmesSelecionados);
                     break;
 
                 default:
@@ -312,45 +333,29 @@ namespace ConsoleApp_Filmes
             }
             Console.ReadLine();
         }
-        private static void ExibirAnimacao(List<string> filmesSelecionados)
+
+            private static void ExibirAnimacao(List<string> filmesSelecionados)
         {
-            Console.WriteLine("FILMES DE COMÉDIA");
+            Console.WriteLine("FILMES DE ANIMAÇÃO");
 
             Console.WriteLine("\r\nQual filme deseja assistir? ");
 
             Console.WriteLine("1) Meu amigãozão");
             Console.WriteLine("2) Franquia Gato de Botas");
-            Console.WriteLine("3) Red: Crescer É uma Fera");
-            Console.WriteLine("4) Pinóquio");
-            Console.WriteLine("5) Cadastrar um novo filme");
+            Console.WriteLine("3) Cadastrar um novo filme");
 
             switch (Console.ReadLine())
             {
                 case "1":
-                    filmesSelecionados.Add($"Meu amigãozão - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
+                    AdicionarFilme(filmesSelecionados, "Meu amigãozão");
                     break;
 
                 case "2":
-                    filmesSelecionados.Add($"Franquia Gato de Botas - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
+                    AdicionarFilme(filmesSelecionados, "Franquia Gato de Botas");
                     break;
 
                 case "3":
-                    filmesSelecionados.Add($"Red: Crescer É uma Fera - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
-                    break;
-
-                case "4":
-                    filmesSelecionados.Add($"Pinóquio - Data: {DateTime.Now}");
-                    Console.WriteLine("Filme adicionado à lista com sucesso! Pessione Enter para retornar ao Menu.");
-                    break;
-
-                case "5":
-                    Console.WriteLine("\r\nDigite o nome do filme: ");
-                    string novoFilme = Console.ReadLine();
-                    filmesSelecionados.Add(novoFilme);
-                    Console.WriteLine($"\r\nFilme '{novoFilme}' cadastrado com sucesso.");
+                    CadastrarNovoFilme(filmesSelecionados);
                     break;
 
                 default:
@@ -362,7 +367,7 @@ namespace ConsoleApp_Filmes
         }
         private static void FilmesAssistidos(List<string> filmesSelecionados)
         {
-            Console.WriteLine($"Olá {nome}, Lista de filmes já assistidos: ");
+            Console.WriteLine($"Olá {nome}! Aqui está sua Lista de filmes já assistidos! :)  ");
             Console.WriteLine();
 
             if (filmesSelecionados.Count == 0)
@@ -373,7 +378,7 @@ namespace ConsoleApp_Filmes
             {
                 foreach (var filmes in filmesSelecionados)
                 {
-                    Console.WriteLine($"{filmes}");
+                    Console.WriteLine($"\r\n{filmes}");
                 }
             }
             Console.ForegroundColor = ConsoleColor.Yellow;
