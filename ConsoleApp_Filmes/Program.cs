@@ -131,19 +131,22 @@ namespace ConsoleApp_Filmes
             Console.WriteLine("Qual o dia, mês e ano você assistiu a este seriado?");
             string dataFilmeAssistido = Console.ReadLine();
 
-            Console.WriteLine("O que achou do seriado? Digite uma nota de 0 a 5");
-            int nota = int.Parse(Console.ReadLine());
-            if (nota < 0 || nota > 5)
+            int nota;
+            while (true)
             {
-                Console.WriteLine("Digite um valor válido");
+                Console.WriteLine("O que achou do filme? Digite uma nota de 0 a 5");
+                if (int.TryParse(Console.ReadLine(), out nota) && nota >= 0 && nota <= 5)
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Digite um valor válido para a nota (0 a 5).");
+                }
             }
-            else
-            {
-                filmesSelecionados.Add($"Tipo de entretenimento: Seriado \r\n Nome: {novofilme} \r\n Nota: {nota} \r\n Data de cadastro: {DateTime.Now}\r\n Assistido dia: {dataFilmeAssistido}");
-                Console.WriteLine($"o seriado '{novofilme}' foi cadastrado com sucesso! Pessione Enter para retornar ao Menu.");
-                Console.WriteLine();
-            }
-            Console.ReadLine();
+
+            filmesSelecionados.Add($"Tipo de entretenimento: Filme\r\nNome: {novofilme}\r\nNota: {nota}\r\nData de cadastro: {DateTime.Now}\r\nAssistido dia: {dataFilmeAssistido}");
+            Console.WriteLine($"O filme '{novofilme}' foi cadastrado com sucesso! Pressione Enter para retornar ao Menu.");
         }
         private static void CadastrarFilme(List<string> filmesSelecionados)
         {
@@ -279,7 +282,7 @@ namespace ConsoleApp_Filmes
 
             Console.WriteLine("1) Premonição");
             Console.WriteLine("2) Não! Não Olhe!");
-            Console.WriteLine("6) Cadastrar um novo filme");
+            Console.WriteLine("3) Cadastrar um novo filme");
 
             switch (Console.ReadLine())
             {
